@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 
-import { parseCommand } from '../index.js'
+import { apply, parseCommand } from '../index.js'
 
 test('empty input is a summary', () => {
   assert.deepEqual(parseCommand(''), {
@@ -27,4 +27,34 @@ test('unknown tokens are ignored instead of failing', () => {
   const parsed = parseCommand('receipt wat 7d')
   assert.equal(parsed.format, 'receipt')
   assert.equal(parsed.since, '7d')
+})
+
+test('the command declares input so "/cache card" is not sent as a message', () => {
+  const tools = []
+  const commands = []
+  const scope = {
+    get: () => ({
+      register: (definition) => {
+        commands.push(definition)
+        return () => {}
+      },
+    }),
+    effect: (effect) => effect(),
+  }
+  const ctx = {
+    tools: { register: (tool) => tools.push(tool) },
+    inject: (deps, callback) => {
+      assert.deepEqual(deps, ['commands'])
+      callback(scope)
+    },
+  }
+
+  apply(ctx, {})
+
+  assert.equal(tools.length, 1)
+  assert.equal(tools[0].name, 'cache_receipt')
+  assert.equal(commands.length, 1)
+  assert.equal(commands[0].name, 'cache')
+  assert.equal(typeof commands[0].input?.hint, 'string')
+  assert.ok(commands[0].input.hint.includes('card'))
 })

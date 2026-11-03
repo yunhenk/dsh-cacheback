@@ -1,6 +1,6 @@
 {
   "name": "dsh-cacheback",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "The missing receipt for DeepSeek's prefix cache: replay local DSH sessions, price every call at peak/off-peak rates, and see how much the cache saved.",
   "keywords": [
     "dsh-plugin",

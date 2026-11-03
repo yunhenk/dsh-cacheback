@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.1 — 2026-11-03
+
+- Fix `/cache` with arguments: the command now declares an input hint, so `/cache card`,
+  `/cache receipt`, and `/cache 30d redact` are executed instead of being sent as chat messages.
+- Register the command through `ctx.inject(['commands'])`, so the plugin still loads in profiles
+  without a command registry and the command appears as soon as the registry is available.
+- Add a release workflow that packs the tarball on every `v*` tag.
+
 ## 0.1.0 — 2026-11-03
 
 - First public release.

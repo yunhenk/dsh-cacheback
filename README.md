@@ -6,7 +6,7 @@
   <a href="https://github.com/yunhenk/dsh-cacheback"><img alt="DSH plugin" src="https://img.shields.io/badge/DSH-plugin-5b7cff"></a>
   <a href="LICENSE"><img alt="MIT" src="https://img.shields.io/badge/license-MIT-4fe3c1"></a>
   <a href="https://github.com/yunhenk/dsh-cacheback/actions/workflows/test.yml"><img alt="test" src="https://github.com/yunhenk/dsh-cacheback/actions/workflows/test.yml/badge.svg"></a>
-  <a href="https://github.com/yunhenk/dsh-cacheback/releases"><img alt="version" src="https://img.shields.io/badge/version-0.1.0-f4b860"></a>
+  <a href="https://github.com/yunhenk/dsh-cacheback/releases"><img alt="version" src="https://img.shields.io/badge/version-0.1.1-f4b860"></a>
 </p>
 
 <p align="center">

@@ -39,7 +39,7 @@ export function apply(ctx, config = {}) {
       ? config.repo
       : 'github.com/yunhenk/dsh-cacheback',
     open: config.open === true,
-    version: '0.1.0',
+    version: '0.1.1',
   }
 
   ctx.tools.register({
@@ -121,35 +121,42 @@ export function apply(ctx, config = {}) {
     presentCall: () => ({ card: 'generic', title: 'Cacheback receipt', kind: 'read' }),
   })
 
-  const commands = ctx.get('commands')
-  if (commands === undefined) return
-
-  commands.register({
-    name: COMMAND_NAME,
-    description:
-      'DeepSeek cache receipt: savings, hit rate, spend breakdown, and tips. '
-      + 'Usage: /cache [receipt|card|json] [7d|30d|90d|all] [zh|en] [open] [project <name>]',
-    handler: async (invocation) => {
-      try {
-        const args = parseCommand(invocation.rawInput)
-        const result = await generate({
-          format: args.format,
-          since: args.since,
-          project: args.project,
-          lang: args.lang ?? defaults.lang,
-          open: args.explicitOpen || args.format === 'receipt' || args.format === 'card',
-          redact: args.redact,
-          refresh: args.refresh,
-          usdToCny: defaults.usdToCny,
-          repo: defaults.repo,
-          version: defaults.version,
-        })
-        return { kind: 'success', text: result.text }
-      } catch (error) {
-        const reason = error instanceof Error ? error.message : String(error)
-        return { kind: 'error', text: `cacheback failed: ${reason}` }
-      }
-    },
+  // Commands are optional: the plugin still provides the tool in profiles
+  // without a human-command registry. `ctx.inject` waits for the service and
+  // disposes the registration with this plugin.
+  ctx.inject(['commands'], (scope) => {
+    const commands = scope.get('commands')
+    if (commands === undefined) return
+    scope.effect(() => commands.register({
+      name: COMMAND_NAME,
+      description:
+        'DeepSeek cache receipt: savings, hit rate, spend breakdown, and tips. '
+        + 'Usage: /cache [receipt|card|json] [7d|30d|90d|all] [zh|en] [redact] [open] [project <name>]',
+      input: {
+        hint: 'receipt | card | json · 7d | 30d | all · zh | en · redact · project <name>',
+      },
+      handler: async (invocation) => {
+        try {
+          const args = parseCommand(invocation.rawInput)
+          const result = await generate({
+            format: args.format,
+            since: args.since,
+            project: args.project,
+            lang: args.lang ?? defaults.lang,
+            open: args.explicitOpen || args.format === 'receipt' || args.format === 'card',
+            redact: args.redact,
+            refresh: args.refresh,
+            usdToCny: defaults.usdToCny,
+            repo: defaults.repo,
+            version: defaults.version,
+          })
+          return { kind: 'success', text: result.text }
+        } catch (error) {
+          const reason = error instanceof Error ? error.message : String(error)
+          return { kind: 'error', text: `cacheback failed: ${reason}` }
+        }
+      },
+    }))
   })
 }
 
