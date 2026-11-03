@@ -72,7 +72,7 @@ test('receipt is a complete HTML document with escaped user text', () => {
   assert.ok(!html.includes('<script>alert(1)</script>'))
   assert.ok(html.includes('&lt;script&gt;alert(1)&lt;/script&gt;'))
   assert.ok(!html.includes('onerror=alert(1)>'))
-  assert.match(html, /dsh-cacheback v0\.1\.0/)
+  assert.match(html, /dsh-cacheback v0\.1\.1/)
 })
 
 test('card is a standalone SVG that omits project names and titles', () => {
