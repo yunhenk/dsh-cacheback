@@ -88,7 +88,7 @@
           "source": {
             "type": "git",
             "url": "https://github.com/yunhenk/dsh-cacheback",
-            "commit": "0000000000000000000000000000000000000000"
+            "commit": "374e0b2fc6bbbd1c674b010ff84237a900e249e6"
           },
           "engines": {
             "dsh": ">=0.2.1-rc.2"
