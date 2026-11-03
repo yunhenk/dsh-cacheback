@@ -81,7 +81,7 @@ already writes. A restart (or HMR reload) makes `/cache` available.
 **Or install from Discover.** Add this index source under **Plugins → Discover → Index sources**:
 
 ```text
-https://raw.githubusercontent.com/yunhenk/dsh-cacheback/main/market/index.json
+https://raw.githubusercontent.com/yunhenk/dsh-cacheback/068d5079ffe917746698adf523f9cf9b7558a9c9/market/index.json
 ```
 
 ## What the receipt measures
