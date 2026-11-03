@@ -75,7 +75,7 @@ dsh plugin --profile web add link:/absolute/path/to/dsh-cacheback
 **也可以从 Discover 装。** 在 **Plugins → Discover → Index sources** 添加：
 
 ```text
-https://raw.githubusercontent.com/yunhenk/dsh-cacheback/068d5079ffe917746698adf523f9cf9b7558a9c9/market/index.json
+https://raw.githubusercontent.com/yunhenk/dsh-cacheback/53d96752f562e5e5280e07733dcb2ee9d7869986/market/index.json
 ```
 
 ## 账单里有什么
