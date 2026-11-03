@@ -83,12 +83,12 @@
       },
       "versions": [
         {
-          "version": "0.1.0",
-          "publishTimestamp": 1793714615,
+          "version": "0.1.1",
+          "publishTimestamp": 1793716321,
           "source": {
             "type": "git",
             "url": "https://github.com/yunhenk/dsh-cacheback",
-            "commit": "dbf45d4b69a5192f562e95c9adeef37b2b51b389"
+            "commit": "a623d3d060eb2eb15f0be2671a4a49d350f4ab49"
           },
           "engines": {
             "dsh": ">=0.2.1-rc.2"
