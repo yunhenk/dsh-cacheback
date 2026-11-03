@@ -1,0 +1,100 @@
+{
+  "format": 1,
+  "title": {
+    "en": "Cacheback · DeepSeek cache receipts",
+    "zh": "Cacheback · DeepSeek 缓存账单"
+  },
+  "description": {
+    "en": "Local-first receipts for DeepSeek prefix caching: how much it saved, where the money went, and what still leaks.",
+    "zh": "本地优先的 DeepSeek 前缀缓存账单：省了多少、钱花在哪、哪里还在漏。"
+  },
+  "metadata": {
+    "categories": {
+      "usage": {
+        "title": {
+          "en": "Usage & Billing",
+          "zh": "用量与账单"
+        }
+      },
+      "observability": {
+        "title": {
+          "en": "Observability",
+          "zh": "可观测性"
+        }
+      }
+    },
+    "labels": {
+      "cache": {
+        "title": {
+          "en": "Cache",
+          "zh": "缓存"
+        }
+      },
+      "cost": {
+        "title": {
+          "en": "Cost",
+          "zh": "成本"
+        }
+      },
+      "privacy": {
+        "title": {
+          "en": "Local-first",
+          "zh": "本地优先"
+        }
+      }
+    },
+    "sortKeys": {
+      "saved": {
+        "title": {
+          "en": "Reported savings",
+          "zh": "报告省下"
+        },
+        "order": "desc"
+      }
+    }
+  },
+  "plugins": [
+    {
+      "name": "dsh-cacheback",
+      "title": {
+        "en": "Cacheback",
+        "zh": "Cacheback 缓存返现"
+      },
+      "description": {
+        "en": "The missing receipt for DeepSeek prefix caching: replay local sessions, price every call at peak/off-peak rates, get an HTML receipt and a shareable card.",
+        "zh": "把 DeepSeek 前缀缓存省下的钱逐笔算清：回放本地会话、按官方峰谷价计费，生成 HTML 账单与可分享卡片。"
+      },
+      "icon": "icon.svg",
+      "author": "yunhe",
+      "homepage": "https://github.com/yunhenk/dsh-cacheback#readme",
+      "repository": {
+        "url": "https://github.com/yunhenk/dsh-cacheback"
+      },
+      "metadata": {
+        "category": "usage",
+        "labels": [
+          "cache",
+          "cost",
+          "privacy"
+        ],
+        "sortKeys": {
+          "saved": 0
+        }
+      },
+      "versions": [
+        {
+          "version": "0.1.0",
+          "publishTimestamp": 1793714615,
+          "source": {
+            "type": "git",
+            "url": "https://github.com/yunhenk/dsh-cacheback",
+            "commit": "0000000000000000000000000000000000000000"
+          },
+          "engines": {
+            "dsh": ">=0.2.1-rc.2"
+          }
+        }
+      ]
+    }
+  ]
+}

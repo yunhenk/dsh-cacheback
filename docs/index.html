@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Cacheback · DeepSeek 缓存账单</title>
+<meta name="description" content="Cacheback 把 DeepSeek 前缀缓存替你省下的钱逐笔算清：回放本地 DSH 会话日志，按官方峰谷价计费，生成可打印的 HTML 账单和可分享的 SVG 卡片。数据不离开本机。">
+<meta property="og:title" content="Cacheback · DeepSeek 缓存账单">
+<meta property="og:description" content="DeepSeek 的前缀缓存一直在替你省钱。Cacheback 把账单打出来：15.5 亿缓存 tokens、99.66% 命中率、省下约 ¥2,368。">
+<meta property="og:image" content="https://yunhenk.github.io/dsh-cacheback/card.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cacheback · DeepSeek 缓存账单">
+<meta name="twitter:description" content="DeepSeek 的前缀缓存一直在替你省钱。Cacheback 把账单打出来。">
+<meta name="twitter:image" content="https://yunhenk.github.io/dsh-cacheback/card.png">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<style>
+:root {
+  --ink: #050914; --panel: #0a1222; --line: rgba(148,171,214,.14);
+  --text: #edf2fb; --muted: #8fa0bd; --faint: #5f6f8d;
+  --blue: #5b7cff; --blue-2: #8fa4ff; --cyan: #4fe3c1; --amber: #f4b860;
+  --max: 1120px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; color: var(--text);
+  background:
+    radial-gradient(1000px 620px at 8% -10%, rgba(91,124,255,.20), transparent 60%),
+    radial-gradient(800px 500px at 100% 0%, rgba(79,227,193,.10), transparent 55%),
+    linear-gradient(180deg, #050914 0%, #060b18 50%, #050914 100%);
+  font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "tnum" 1;
+}
+a { color: var(--blue-2); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.wrap { width: min(var(--max), calc(100% - 40px)); margin: 0 auto; }
+nav { display: flex; align-items: center; justify-content: space-between; padding: 26px 0; border-bottom: 1px solid var(--line); }
+.brand { display: flex; align-items: center; gap: 11px; font-weight: 800; letter-spacing: .18em; font-size: 14px; }
+.brand img { width: 30px; height: 30px; }
+.nav-links { display: flex; gap: 22px; font-size: 12px; color: var(--muted); }
+.nav-links a { color: var(--muted); }
+.nav-links a:hover { color: var(--text); text-decoration: none; }
+.hero { display: grid; grid-template-columns: 1.1fr .9fr; gap: 44px; align-items: center; padding: 64px 0 44px; }
+.eyebrow { color: var(--cyan); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; margin-bottom: 16px; }
+h1 { font-size: clamp(34px, 4.4vw, 54px); line-height: 1.08; letter-spacing: -.04em; margin: 0 0 18px; }
+h1 em { font-style: normal; background: linear-gradient(92deg, var(--blue-2), var(--cyan)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.lede { color: var(--muted); font-size: 16px; line-height: 1.75; max-width: 540px; margin: 0 0 24px; }
+.lede b { color: var(--text); font-weight: 600; }
+.install { display: flex; align-items: center; gap: 8px; background: #070d1c; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; max-width: 520px; }
+.install code { flex: 1; overflow: auto; white-space: nowrap; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: var(--text); }
+.install button { border: 1px solid var(--line); background: rgba(255,255,255,.04); color: var(--muted); border-radius: 7px; padding: 6px 10px; font-size: 11px; cursor: pointer; }
+.install button:hover { color: var(--text); }
+.hero-note { color: var(--faint); font-size: 11px; margin-top: 10px; }
+.hero-card { border: 1px solid var(--line); border-radius: 18px; overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,.45); }
+.hero-card img { display: block; width: 100%; height: auto; }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; margin: 8px 0 70px; }
+.stat { background: rgba(10,18,34,.9); padding: 18px 20px; }
+.stat b { display: block; font-size: 24px; letter-spacing: -.02em; }
+.stat span { display: block; color: var(--muted); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; margin-top: 4px; }
+section { padding: 54px 0; border-top: 1px solid var(--line); }
+.section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; margin-bottom: 26px; }
+h2 { font-size: 26px; letter-spacing: -.02em; margin: 0; }
+.section-head span { color: var(--faint); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
+.receipt-frame { border: 1px solid var(--line); border-radius: 18px; overflow: hidden; background: #060b18; box-shadow: 0 30px 80px rgba(0,0,0,.4); }
+.receipt-frame img { display: block; width: 100%; height: auto; }
+.caption { color: var(--faint); font-size: 11px; margin-top: 10px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.card { border: 1px solid var(--line); border-radius: 16px; padding: 20px; background: linear-gradient(180deg, rgba(13,23,43,.75), rgba(8,14,28,.8)); }
+.card .num { color: var(--cyan); font-size: 11px; letter-spacing: .16em; margin-bottom: 10px; }
+.card h3 { font-size: 15px; margin: 0 0 8px; }
+.card p { color: var(--muted); font-size: 12.5px; line-height: 1.7; margin: 0; }
+.card code { color: var(--blue-2); font-size: 12px; }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+.prose p { color: var(--muted); font-size: 14px; line-height: 1.8; }
+.prose h3 { font-size: 16px; margin: 24px 0 8px; }
+table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--line); }
+th { color: var(--faint); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; font-weight: 500; }
+td { color: var(--muted); }
+td b { color: var(--text); font-weight: 600; }
+.good { color: var(--cyan); }
+pre { background: #070d1c; border: 1px solid var(--line); border-radius: 12px; padding: 16px; overflow: auto; color: #cbd7f2; font-size: 11.5px; line-height: 1.65; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.faq { display: grid; gap: 10px; }
+details { border: 1px solid var(--line); border-radius: 12px; padding: 15px 18px; background: rgba(10,18,34,.6); }
+summary { cursor: pointer; font-size: 13.5px; color: var(--text); }
+details p { color: var(--muted); font-size: 12.5px; line-height: 1.7; margin: 10px 0 0; }
+.cta { text-align: center; padding: 70px 0; border-top: 1px solid var(--line); }
+.cta h2 { font-size: clamp(30px, 4vw, 46px); margin-bottom: 12px; }
+.cta p { color: var(--muted); margin: 0 0 22px; }
+.button { display: inline-block; background: linear-gradient(92deg, var(--blue), var(--cyan)); color: #041022; font-weight: 700; padding: 12px 18px; border-radius: 9px; font-size: 13px; }
+.button:hover { text-decoration: none; filter: brightness(1.08); }
+footer { border-top: 1px solid var(--line); padding: 26px 0 42px; color: var(--faint); font-size: 11px; display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+@media (max-width: 860px) {
+  .hero { grid-template-columns: 1fr; padding-top: 40px; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .grid-3 { grid-template-columns: 1fr; }
+  .split { grid-template-columns: 1fr; gap: 24px; }
+  .nav-links { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <a class="brand" href="#"><img src="icon.svg" alt=""> CACHEBACK</a>
+    <div class="nav-links">
+      <a href="#receipt">账单长什么样</a>
+      <a href="#how">怎么算的</a>
+      <a href="#privacy">隐私</a>
+      <a href="https://github.com/yunhenk/dsh-cacheback">GitHub</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div>
+      <div class="eyebrow">DeepSeek Harness plugin · 本地优先</div>
+      <h1>缓存一直在替你省钱。<br><em>只是没人给你看账单。</em></h1>
+      <p class="lede">
+        DeepSeek 的前缀缓存命中价是未命中价的 <b>1/50</b>。DSH 的日志里本来就有每一笔命中，但从来没有一页把总额算给你。
+        Cacheback 逐笔回放本地会话，按官方峰谷价重新计费，把 <b>省下的钱、花掉的钱、还能省的钱</b> 打成一张收据。
+      </p>
+      <div class="install">
+        <code id="install">dsh plugin --profile web add github:yunhenk/dsh-cacheback</code>
+        <button type="button" id="copy">复制</button>
+      </div>
+      <div class="hero-note">零运行时依赖 · 零网络请求 · 只读 ~/.dsh/sessions</div>
+    </div>
+    <div class="hero-card">
+      <img src="card.png" alt="Cacheback 分享卡：DeepSeek 前缀缓存省下约 ¥2,368">
+    </div>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><b>50×</b><span>缓存命中 vs 未命中价差</span></div>
+    <div class="stat"><b>99.66%</b><span>这台机器的命中率</span></div>
+    <div class="stat"><b>≈¥2,368</b><span>已省下（真实日志）</span></div>
+    <div class="stat"><b>0</b><span>上传的数据</span></div>
+  </div>
+
+  <section id="receipt">
+    <div class="section-head"><h2>一张能打印、能分享的账单</h2><span>HTML / SVG · 无脚本 · 无外部资源</span></div>
+    <div class="receipt-frame"><img src="receipt-top.png" alt="Cacheback HTML 账单"></div>
+    <div class="caption">截图来自真实会话日志，项目名已脱敏。你自己的账单会显示真实项目名；分享前可以用 <code>/cache redact</code>。<a href="https://github.com/yunhenk/dsh-cacheback/blob/main/docs/receipt.png">查看完整账单 →</a></div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>它替你回答四个问题</h2><span>what / where / why / next</span></div>
+    <div class="grid-3">
+      <div class="card"><div class="num">01 · WHAT</div><h3>到底省了多少？</h3><p>把每次调用的命中 / 未命中 / 输出分开计价，再和“没有缓存”的反事实成本对比。不是拍脑袋的百分比，是逐笔加出来的美元和人民币。</p></div>
+      <div class="card"><div class="num">02 · WHERE</div><h3>钱花在哪？</h3><p>缓存读取、未命中、输出三条线；项目、模型、天三个维度。输出经常是隐藏的大头，账单会把它单独标出来。</p></div>
+      <div class="card"><div class="num">03 · WHY</div><h3>为什么还在漏？</h3><p>峰时溢价、冷启动、会话分散、插件前缀变化——每一条都给出具体金额和可执行的动作，而不是一句“注意成本”。</p></div>
+      <div class="card"><div class="num">04 · NEXT</div><h3>下一张卡怎么发？</h3><p><code>/cache card</code> 生成 1200×630 SVG，只有聚合数字，没有项目名、路径和会话标题。发 X、发群、发朋友圈都不会泄露工作区。</p></div>
+      <div class="card"><div class="num">05 · HOW</div><h3>不用埋点</h3><p>DSH 已经在每个 <code>assistant/message</code> 里持久化了 provider usage。Cacheback 只读这些日志，连 session 都不用重跑。</p></div>
+      <div class="card"><div class="num">06 · TRUST</div><h3>每一笔都能复核</h3><p>价格表、峰时窗口、节假日、汇率、反事实公式全部写在 <a href="https://github.com/yunhenk/dsh-cacheback/blob/main/docs/method.md">docs/method.md</a>。账单底部带计价日期。</p></div>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="split">
+      <div class="prose">
+        <div class="section-head"><h2>怎么算的</h2><span>method</span></div>
+        <p>DSH 的 JSONL 后端每批写一个 Zstandard frame，一个长会话可能有几千帧。Cacheback 按 frame magic 切开逐帧解码，尾部写了一半的帧直接跳过，所以会话正在跑的时候也能读。</p>
+        <p>每条 <code>assistant/message</code> 都带 provider 返回的 usage 和模型 id。Cacheback 按调用发生的北京时间判断峰谷，逐笔计价，再按项目 / 模型 / 天汇总。</p>
+        <p>“省下”的定义是：同样的 prompt 如果没有命中缓存、全部按未命中价重读，需要多花多少。这是衡量前缀缓存价值的标准反事实，不是退款，也不是估算。</p>
+        <p><a href="https://github.com/yunhenk/dsh-cacheback/blob/main/docs/method.md">完整公式与事件结构 →</a></p>
+      </div>
+      <div>
+        <table>
+          <thead><tr><th>deepseek-flash</th><th>谷时</th><th>峰时</th></tr></thead>
+          <tbody>
+            <tr><td>缓存命中 / 1M</td><td class="good">$0.003</td><td>$0.006</td></tr>
+            <tr><td>缓存未命中 / 1M</td><td><b>$0.15</b></td><td><b>$0.30</b></td></tr>
+            <tr><td>输出 / 1M</td><td>$0.60</td><td>$1.20</td></tr>
+          </tbody>
+        </table>
+        <div class="caption">官方价目表，读取于 2026-11-03。峰时 = 北京时间工作日 09:00–12:00 / 14:00–18:00；谷时半价。</div>
+        <pre>/cache
+/cache receipt        # HTML 账单
+/cache card           # 分享卡
+/cache 30d redact     # 最近 30 天，隐藏项目名
+/cache json           # 原始数字</pre>
+      </div>
+    </div>
+  </section>
+
+  <section id="privacy">
+    <div class="section-head"><h2>你的日志，不出你的电脑</h2><span>local-first</span></div>
+    <div class="grid-3">
+      <div class="card"><h3>只读本地</h3><p>输入是 <code>~/.dsh/sessions</code>，输出是 <code>~/.dsh/cacheback</code>。没有 socket，没有 telemetry，没有远程字体。</p></div>
+      <div class="card"><h3>分享卡默认脱敏</h3><p>SVG 只有总额、命中率、调用数。项目名、路径、会话标题一个都不出现。</p></div>
+      <div class="card"><h3>随时删干净</h3><p>删掉 <code>~/.dsh/cacheback</code> 和 profile 里的条目即可。会话日志本来属于 DSH。</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>常见问题</h2><span>FAQ</span></div>
+    <div class="faq">
+      <details><summary>这钱会退给我吗？</summary><p>不会。这是“缓存折扣值多少钱”的量化，不是返现，也不是账单退款。它帮你判断缓存有没有在工作、哪里还在漏。</p></details>
+      <details><summary>和 DeepSeek 控制台的账单对得上吗？</summary><p>口径一致：都用 provider 返回的 usage 和官方价目表。控制台可能还有赠送余额、税费、汇率差；Cacheback 是本地的、可复核的收据，不是发票。</p></details>
+      <details><summary>为什么我的命中率没有截图里高？</summary><p>命中率取决于会话长度、是否续用、插件/工具前缀是否稳定。新会话第一请求必然是 miss；长任务、少重开，命中率会很快上去。</p></details>
+      <details><summary>支持 Claude / GPT 吗？</summary><p>当前只给 DeepSeek 调用计价，因为缓存计价方式不同。其他 provider 的调用会被计数并标注“已排除”，不会用错误的价格硬算。</p></details>
+      <details><summary>数据会被上传吗？</summary><p>不会。插件没有网络代码。分享卡是一个本地 SVG 文件，发不发、发去哪里由你决定。</p></details>
+    </div>
+  </section>
+
+  <div class="cta">
+    <h2>下一次 /cache，别再猜。</h2>
+    <p>装一个插件，把你已经付过的缓存折扣拿回来看看。</p>
+    <a class="button" href="https://github.com/yunhenk/dsh-cacheback">GitHub · yunhenk/dsh-cacheback</a>
+  </div>
+
+  <footer>
+    <span>Cacheback · MIT · 为 DSH 插件生态而做</span>
+    <span>不是 DeepSeek 官方产品 · 截图为真实日志，项目名已脱敏</span>
+  </footer>
+</div>
+<script>
+const button = document.getElementById('copy')
+button?.addEventListener('click', async () => {
+  const text = document.getElementById('install').textContent
+  try {
+    await navigator.clipboard.writeText(text)
+    button.textContent = '已复制'
+    setTimeout(() => { button.textContent = '复制' }, 1600)
+  } catch {
+    button.textContent = '请手动复制'
+  }
+})
+</script>
+</body>
+</html>

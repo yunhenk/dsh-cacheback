@@ -1,0 +1,49 @@
+{
+  "name": "dsh-cacheback",
+  "version": "0.1.0",
+  "description": "The missing receipt for DeepSeek's prefix cache: replay local DSH sessions, price every call at peak/off-peak rates, and see how much the cache saved.",
+  "keywords": [
+    "dsh-plugin",
+    "deepseek",
+    "deepseek-harness",
+    "cache",
+    "cost",
+    "spend",
+    "observability",
+    "receipt"
+  ],
+  "license": "MIT",
+  "author": "yunhe",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./lib/*": "./lib/*",
+    "./locale/*.json": "./locale/*.json",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./icon.svg": "./icon.svg",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.js",
+    "lib/*.js",
+    "locale/*.json",
+    "cordis.patch.yml",
+    "icon.svg",
+    "README.md",
+    "README.zh.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "dsh": ">=0.2.1-rc.2",
+    "node": ">=22.15"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  }
+}
