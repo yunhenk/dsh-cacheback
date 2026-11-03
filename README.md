@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/card.png" alt="Cacheback share card: ¥2,368 saved by DeepSeek prefix caching" width="100%">
+  <img src="docs/card.png" alt="Cacheback share card: ¥2,386 saved by DeepSeek prefix caching" width="100%">
 </p>
 
 Cacheback is a [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin that turns the session
@@ -18,7 +18,7 @@ published peak/off-peak rates, and answers one question:
 
 > **How much did DeepSeek's prefix cache actually save me?**
 
-On the machine this was built on: **1.55B cached tokens, a 99.66% cache hit rate, and ≈¥2,368 saved** — the same
+On the machine this was built on: **1.57B cached tokens, a 99.66% cache hit rate, and ≈¥2,386 saved** — the same
 prompts would have cost about 30× more at the cache-miss price. Project names are redacted in the screenshot; your
 receipt uses your own workspace names.
 
@@ -31,23 +31,23 @@ DSH already records both numbers for every call, but nothing puts them on one pa
 
 ```text
 Cacheback · DeepSeek cache receipt
-2026-08-14 → 2026-11-03 · 11 sessions · 5 projects · 4,172 calls
+2026-08-14 → 2026-11-03 · 11 sessions · 5 projects · 4,226 calls
 
-DeepSeek prefix caching saved you ≈¥2,368.33 ($328.94).
-Without cache $340.26 → you paid $11.32 · 30× cheaper · 99.66% hit rate
+DeepSeek prefix caching saved you ≈¥2,385.88 ($331.37).
+Without cache $342.78 → you paid $11.41 · 30× cheaper · 99.66% hit rate
 
-Spend: cache read $6.71 · cache miss $1.29 · output $3.32
-Tokens: 1.55B hit · 5.26M miss · 3.56M out
+Spend: cache read $6.76 · cache miss $1.29 · output $3.35
+Tokens: 1.57B hit · 5.3M miss · 3.64M out
 
 Projects
   Project A            $185.55  ·  2,186 calls  ·  99.66%
   Project B             $70.53  ·  1,041 calls  ·  99.69%
-  Project C             $68.34  ·    774 calls  ·  99.66%
+  Project C             $68.86  ·    780 calls  ·  99.67%
 
 What to improve
   · Peak premium: 2,119 calls ran at peak. Off-peak is half price.
   · 4 cold starts cost $0.14. Resume a session instead of starting a new one.
-  · Output is 29% of the bill. Shorter answers cut the biggest line.
+  · Output is 29.4% of the bill. Shorter answers cut the biggest line.
   · Keep the tool prefix stable: plugin changes rewrite the cached prefix.
 
 Cache score 99.7 · S
@@ -157,6 +157,12 @@ The test suite covers the pricing calendar, cache-write accounting, multi-frame 
 deduplication, redaction/escaping, command parsing, and the HTML/SVG renderers. No model calls, no network.
 
 See [docs/method.md](docs/method.md) for the exact formulas and event schema.
+
+## For the DSH team
+
+If you run DSH support, growth, or community: Cacheback is a local, privacy-preserving answer to *“is the cache
+working, and why is my bill high?”* It needs no telemetry, no server, and no account. Point a user at `/cache`; the
+share card tells an accurate, positive cache-value story with numbers from their own machine.
 
 ## License
 

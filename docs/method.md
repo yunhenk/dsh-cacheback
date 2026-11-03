@@ -71,6 +71,9 @@ A call is included when all of these hold:
 Calls from another provider are counted as `skippedCalls` and reported as excluded. They are not priced with
 DeepSeek's table, because that would be wrong.
 
+The session also records how many times its **tool table** changed (`request/header` → `tools` fingerprint). Each
+change rewrites the cached prefix; the receipt surfaces the count as a `tool churn` tip when it is non-zero.
+
 Retries are separate `assistant/message` records with their own usage, so they are separate billed attempts. That
 is intentional: a retry costs money too.
 
