@@ -71,6 +71,12 @@ dsh plugin --profile web add link:/absolute/path/to/dsh-cacheback
 
 插件**没有运行时依赖**，**不发起任何网络请求**，只读 DSH 已经写好的会话日志。重启（或 HMR 重载）后 `/cache` 就能用。
 
+**也可以从 Discover 装。** 在 **Plugins → Discover → Index sources** 添加：
+
+```text
+https://raw.githubusercontent.com/yunhenk/dsh-cacheback/main/market/index.json
+```
+
 ## 账单里有什么
 
 | 指标 | 含义 |

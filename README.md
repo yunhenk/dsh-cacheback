@@ -77,6 +77,12 @@ dsh plugin --profile web add link:/absolute/path/to/dsh-cacheback
 The plugin has **zero runtime dependencies**, makes **zero network requests**, and reads only the session logs DSH
 already writes. A restart (or HMR reload) makes `/cache` available.
 
+**Or install from Discover.** Add this index source under **Plugins → Discover → Index sources**:
+
+```text
+https://raw.githubusercontent.com/yunhenk/dsh-cacheback/main/market/index.json
+```
+
 ## What the receipt measures
 
 | Figure | Meaning |
