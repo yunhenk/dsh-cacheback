@@ -15,10 +15,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: npm pack --pack-destination dist
       - run: |
-          file=$(ls dist/dsh-cacheback-*.tgz)
-          cp "$file" dist/dsh-cacheback.tgz
+          mkdir -p dist
+          npm pack --pack-destination dist
+          mv dist/dsh-cacheback-*.tgz dist/dsh-cacheback.tgz
       - uses: softprops/action-gh-release@v2
         with:
           files: dist/dsh-cacheback.tgz
