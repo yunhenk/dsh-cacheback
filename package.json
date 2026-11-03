@@ -42,5 +42,13 @@
     "bundle": {
       "patch": "./cordis.patch.yml"
     }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yunhenk/dsh-cacheback.git"
+  },
+  "homepage": "https://yunhenk.github.io/dsh-cacheback/",
+  "bugs": {
+    "url": "https://github.com/yunhenk/dsh-cacheback/issues"
   }
 }
